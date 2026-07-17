@@ -1,10 +1,15 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 
+app.commandLine.appendSwitch('ignore-certificate-errors')
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
-    height: 800
+    height: 800,
+    webPreferences: {
+      webSecurity: false
+    }
   })
 
   if (process.env['ELECTRON_RENDERER_URL']) {
