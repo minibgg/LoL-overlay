@@ -5,8 +5,8 @@ app.commandLine.appendSwitch('ignore-certificate-errors')
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
-    height: 800,
+    width: 400,
+    height: 400,
     webPreferences: {
       webSecurity: false
     }
