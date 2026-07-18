@@ -12,10 +12,10 @@ export default function App() {
   const [hordeKillCount, setHordeKillCount] = useState(0)
   const [hordeKillMesage, setHordeKillMesage] = useState('')
 
-  function getScoreClass(value) {
+  function getClass(value, x, z) {
     const num = Number(value)
-    if (num >= 9) return 'good-score'
-    if (num >= 7) return 'normal-score'
+    if (num >= x) return 'good-score'
+    if (num >= z) return 'normal-score'
     return 'bad-score'
   }
 
@@ -77,9 +77,9 @@ export default function App() {
     return (
       <div>
         <div id="drag-region" style={{ height: 30, width: '100%' }}></div>
-        <div className={getScoreClass(creepScorePerMinute)}>CS: {creepScorePerMinute}</div>
-        <div className={getScoreClass(goldPerMinute)}>GPM: {goldPerMinute}</div>
-        <div>KDA: {killDeathAssist}</div>
+        <div className={getClass(creepScorePerMinute, 9, 7)}>CS: {creepScorePerMinute}</div>
+        <div className={getClass(goldPerMinute, 470, 390)}>GPM: {goldPerMinute}</div>
+        <div className={getClass(killDeathAssist, 2, 1)}>KDA: {killDeathAssist}</div>
         <div>{hordeKillMesage}</div>
       </div>
     )
