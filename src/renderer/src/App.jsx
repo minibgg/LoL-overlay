@@ -1,5 +1,6 @@
 import { useState, useEffect, use } from 'react'
 import './index.css'
+import { riotApi } from './components/Api'
 
 export default function App() {
   const [gameInfo, setGameInfo] = useState(null)
@@ -8,15 +9,12 @@ export default function App() {
   useEffect(() => {
     async function fetchGameInfo() {
       try {
-        const res = await fetch('https://127.0.0.1:2999/liveclientdata/allgamedata', {
-          cache: 'no-store'
-        })
-        const data = await res.json()
-        console.log({
-          time: data.gameData.gameTime,
-          cs: data.allPlayers[0].scores.creepScore
-        })
-        setGameInfo(data)
+        const activePlayerName = await riotApi.activePlayerName()
+        const playersInfo = await riotApi.playersInfo()
+        const activePlayerInfo = playersInfo.allPlayers.filter((p) => p.riotId === activePlayerName)
+        console.log(activePlayerInfo)
+
+        setGameInfo(playersInfo)
       } catch (error) {
         console.error('fetch error', error)
       }
