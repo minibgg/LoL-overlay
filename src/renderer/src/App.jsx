@@ -5,9 +5,12 @@ import { riotApi } from './components/Api'
 export default function App() {
   const [gameInfo, setGameInfo] = useState(null)
   const [activePlayerInfo, setActivePlayerInfo] = useState(null)
+  const [gameEvents, setGameEvents] = useState(null)
   const [goldPerMinute, setGoldPerMinute] = useState('')
   const [creepScorePerMinute, setCreepScorePerMinute] = useState('')
   const [killDeathAssist, setKillDeathAssist] = useState('')
+  const [hordeKillCount, setHordeKillCount] = useState(0)
+  const [hordeKillMesage, setHordeKillMesage] = useState('')
 
   function getScoreClass(value) {
     const num = Number(value)
@@ -19,7 +22,7 @@ export default function App() {
   useEffect(() => {
     async function fetchGameInfo() {
       try {
-        const gameEvents = await riotApi.gameEvents()
+        setGameEvents(await riotApi.gameEvents())
         const playersInfo = await riotApi.playersInfo()
         setActivePlayerInfo(
           playersInfo.allPlayers.filter((p) => p.riotId === playersInfo.activePlayer.riotId)
@@ -48,12 +51,25 @@ export default function App() {
       activePlayerInfo[0]?.scores?.deaths
 
     setKillDeathAssist(Number.isNaN(kda) ? '0' : kda.toFixed(2))
-  }, [activePlayerInfo, gameInfo])
+  }, [activePlayerInfo, gameInfo, gameEvents])
+
+  useEffect(() => {
+    //нужна помощь
+    if (gameEvents == null) return
+
+    const hordeKills = gameEvents.Events.filter((event) => event.EventName === 'HordeKill')
+
+    if (hordeKills.length > hordeKillCount) {
+      setHordeKillMesage('Grubbie killed')
+    }
+
+    setHordeKillCount(hordeKills.length)
+  }, [gameEvents])
 
   if (gameInfo == null) {
     return (
       <div>
-        <div Id="drag-region" style={{ height: 30, width: '100%' }}></div>
+        <div id="drag-region" style={{ height: 30, width: '100%' }}></div>
         <div className="main-info">ожидание игры</div>
       </div>
     )
@@ -64,6 +80,7 @@ export default function App() {
         <div className={getScoreClass(creepScorePerMinute)}>CS: {creepScorePerMinute}</div>
         <div className={getScoreClass(goldPerMinute)}>GPM: {goldPerMinute}</div>
         <div>KDA: {killDeathAssist}</div>
+        <div>{hordeKillMesage}</div>
       </div>
     )
   }
