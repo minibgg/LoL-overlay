@@ -5,6 +5,7 @@ import { riotApi } from './components/Api'
 export default function App() {
   const [gameInfo, setGameInfo] = useState(null)
   const [activePlayerInfo, setActivePlayerInfo] = useState(null)
+  const [currentGold, setCurrentGold] = useState(null)
   const [creepScore, setCreepScore] = useState(null)
 
   useEffect(() => {
@@ -13,7 +14,7 @@ export default function App() {
         const activePlayerName = await riotApi.activePlayerName()
         const playersInfo = await riotApi.playersInfo()
         setActivePlayerInfo(playersInfo.allPlayers.filter((p) => p.riotId === activePlayerName))
-        console.log(activePlayerInfo)
+        const gameEvents = await riotApi.gameEvents
 
         setGameInfo(playersInfo)
       } catch (error) {
@@ -29,6 +30,7 @@ export default function App() {
   useEffect(() => {
     if (gameInfo !== null) {
       setCreepScore(activePlayerInfo[0].scores.creepScore)
+      setCurrentGold(gameInfo.activePlayer.currentGold)
     }
   }, [gameInfo, activePlayerInfo])
 
@@ -43,7 +45,13 @@ export default function App() {
     return (
       <div>
         <div className="drag-region" style={{ height: 30, width: '100%' }}></div>
-        <div className="main-info">ur creep score: {activePlayerInfo[0].scores.creepScore}</div>
+        <div className="main-info">
+          CS:{' '}
+          {(activePlayerInfo[0].scores.creepScore / (gameInfo.gameData.gameTime / 60)).toFixed(2)}
+        </div>
+        <div>
+          GPM: {(gameInfo.activePlayer.currentGold / (gameInfo.gameData.gameTime / 60)).toFixed(2)}
+        </div>
       </div>
     )
   }

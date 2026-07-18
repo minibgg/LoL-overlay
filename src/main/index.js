@@ -10,6 +10,9 @@ function createWindow() {
     frame: false,
     opacity: 1,
     resizable: true,
+    alwaysOnTop: true,
+    minimizable: false,
+    transparent: true,
     webPreferences: {
       webSecurity: false
     }
