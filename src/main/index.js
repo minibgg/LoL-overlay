@@ -8,7 +8,7 @@ function createWindow() {
     width: 400,
     height: 400,
     frame: false,
-    opacity: 0.7,
+    opacity: 1,
     resizable: true,
     webPreferences: {
       webSecurity: false
