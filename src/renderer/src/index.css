@@ -9,13 +9,18 @@ body {
   padding: 0;
 }
 
-.drag-region {
+#drag-region {
   height: 30px;
   width: 400px;
   -webkit-app-region: drag;
   background-color: #32363f;
 }
-.main-info {
-  display: flex;
-  justify-content: center;
+.good-score {
+  color: lime;
+}
+.normal-score {
+  color: yellow;
+}
+.bad-score {
+  color: red;
 }
