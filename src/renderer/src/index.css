@@ -1,0 +1,21 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+.drag-region {
+  height: 30px;
+  width: 400px;
+  -webkit-app-region: drag;
+  background-color: #32363f;
+}
+.main-info {
+  display: flex;
+  justify-content: center;
+}

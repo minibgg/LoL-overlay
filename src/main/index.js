@@ -7,6 +7,9 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 400,
     height: 400,
+    frame: false,
+    opacity: 0.7,
+    resizable: true,
     webPreferences: {
       webSecurity: false
     }

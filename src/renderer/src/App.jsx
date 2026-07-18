@@ -1,4 +1,5 @@
 import { useState, useEffect, use } from 'react'
+import './index.css'
 
 export default function App() {
   const [gameInfo, setGameInfo] = useState(null)
@@ -7,8 +8,14 @@ export default function App() {
   useEffect(() => {
     async function fetchGameInfo() {
       try {
-        const res = await fetch('https://127.0.0.1:2999/liveclientdata/allgamedata')
+        const res = await fetch('https://127.0.0.1:2999/liveclientdata/allgamedata', {
+          cache: 'no-store'
+        })
         const data = await res.json()
+        console.log({
+          time: data.gameData.gameTime,
+          cs: data.allPlayers[0].scores.creepScore
+        })
         setGameInfo(data)
       } catch (error) {
         console.error('fetch error', error)
@@ -27,8 +34,18 @@ export default function App() {
   }, [gameInfo])
 
   if (gameInfo == null) {
-    return <div>ожидание игры</div>
+    return (
+      <div>
+        <div className="drag-region" style={{ height: 30, width: '100%' }}></div>
+        <div className="main-info">ожидание игры</div>
+      </div>
+    )
   } else {
-    return <div>ur creep score: {creepScore}</div>
+    return (
+      <div>
+        <div className="drag-region" style={{ height: 30, width: '100%' }}></div>
+        <div className="main-info">ur creep score: {creepScore}</div>
+      </div>
+    )
   }
 }
