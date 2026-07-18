@@ -5,16 +5,15 @@ import { riotApi } from './components/Api'
 export default function App() {
   const [gameInfo, setGameInfo] = useState(null)
   const [activePlayerInfo, setActivePlayerInfo] = useState(null)
-  const [currentGold, setCurrentGold] = useState(null)
-  const [creepScore, setCreepScore] = useState(null)
 
   useEffect(() => {
     async function fetchGameInfo() {
       try {
-        const activePlayerName = await riotApi.activePlayerName()
         const playersInfo = await riotApi.playersInfo()
-        setActivePlayerInfo(playersInfo.allPlayers.filter((p) => p.riotId === activePlayerName))
-        const gameEvents = await riotApi.gameEvents
+        setActivePlayerInfo(
+          playersInfo.allPlayers.filter((p) => p.riotId === playersInfo.activePlayer.riotId)
+        )
+        const gameEvents = await riotApi.gameEvents()
 
         setGameInfo(playersInfo)
       } catch (error) {
@@ -26,13 +25,6 @@ export default function App() {
 
     return () => clearInterval(intervalId)
   }, [])
-
-  useEffect(() => {
-    if (gameInfo !== null) {
-      setCreepScore(activePlayerInfo[0].scores.creepScore)
-      setCurrentGold(gameInfo.activePlayer.currentGold)
-    }
-  }, [gameInfo, activePlayerInfo])
 
   if (gameInfo == null) {
     return (
@@ -46,11 +38,14 @@ export default function App() {
       <div>
         <div className="drag-region" style={{ height: 30, width: '100%' }}></div>
         <div className="main-info">
-          CS:{' '}
-          {(activePlayerInfo[0].scores.creepScore / (gameInfo.gameData.gameTime / 60)).toFixed(2)}
+          CS:
+          {(activePlayerInfo[0]?.scores?.creepScore / (gameInfo?.gameData?.gameTime / 60)).toFixed(
+            2
+          )}
         </div>
         <div>
-          GPM: {(gameInfo.activePlayer.currentGold / (gameInfo.gameData.gameTime / 60)).toFixed(2)}
+          GPM:{' '}
+          {(gameInfo?.activePlayer?.currentGold / (gameInfo?.gameData?.gameTime / 60)).toFixed(2)}
         </div>
       </div>
     )

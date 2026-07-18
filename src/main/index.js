@@ -12,7 +12,6 @@ function createWindow() {
     resizable: true,
     alwaysOnTop: true,
     minimizable: false,
-    transparent: true,
     webPreferences: {
       webSecurity: false
     }
