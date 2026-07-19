@@ -6,7 +6,7 @@ export default function App() {
   const [gameInfo, setGameInfo] = useState(null)
   const [activePlayerInfo, setActivePlayerInfo] = useState(null)
   const [gameEvents, setGameEvents] = useState(null)
-  const [goldPerMinute, setGoldPerMinute] = useState('')
+  //  const [goldPerMinute, setGoldPerMinute] = useState('')
   const [creepScorePerMinute, setCreepScorePerMinute] = useState('')
   const [killDeathAssist, setKillDeathAssist] = useState('')
   const [hordeKillCount, setHordeKillCount] = useState(0)
@@ -40,9 +40,12 @@ export default function App() {
 
   useEffect(() => {
     if (activePlayerInfo === null || gameInfo === null) return
-    setGoldPerMinute(
-      (gameInfo?.activePlayer?.currentGold / (gameInfo?.gameData?.gameTime / 60)).toFixed(2)
-    )
+    let allItemsCost = 0
+    for (let i = 0; i < activePlayerInfo[0].items.length; i++) {
+      allItemsCost += activePlayerInfo[0].items[i].price
+    }
+    //    const allCurentGold = gameInfo?.activePlayer?.currentGold + allItemsCost
+    //    setGoldPerMinute((allCurentGold / (gameInfo?.gameData?.gameTime / 60)).toFixed(2))
     setCreepScorePerMinute(
       (activePlayerInfo[0]?.scores?.creepScore / (gameInfo?.gameData?.gameTime / 60)).toFixed(2)
     )
@@ -78,7 +81,7 @@ export default function App() {
       <div>
         <div id="drag-region" style={{ height: 30, width: '100%' }}></div>
         <div className={getClass(creepScorePerMinute, 9, 7)}>CS: {creepScorePerMinute}</div>
-        <div className={getClass(goldPerMinute, 470, 390)}>GPM: {goldPerMinute}</div>
+        {/* <div className={getClass(goldPerMinute, 470, 390)}>GPM: {goldPerMinute}</div> */}
         <div className={getClass(killDeathAssist, 2, 1)}>KDA: {killDeathAssist}</div>
         <div>{hordeKillMesage}</div>
       </div>
